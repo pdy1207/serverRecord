@@ -1,1 +1,47 @@
+서버 접속 및 상태 확인 가이드 (Windows PowerShell 기준)
 
+
+## 1. 서버 접속 방법
+```powershell
+ssh -p 10010 dinkpet@1.228.243.28
+```
+
+## 어떤 서버가 실행 중인지 확인 
+
+```
+ps -ef | grep apache2
+ps -ef | grep nginx
+```
+
+ex)
+```
+nginx: master process / nginx: worker process → Nginx 실행 중
+apache2 → Apache 실행 중
+```
+### Nginx 서비스 상태 확인 (root 권한 필요)
+```
+sudo systemctl status nginx
+```
+
+결과 예시
+
+`active (running)` → 실행 중 </br>
+`inactive` → 설치됐으나 꺼짐 </br>
+`not found` → 설치 안됨 </br>
+
+### 이후 플랫폼 확인 & 서버 정상 여부 확인 & root권한 있을시 access/ error 로그 확인
+
+>⚠️ 권한 없는 계정으로는 sudo systemctl 명령이나 로그 확인이 불가하므로, 서버 상태 확인은 브라우저와 프로세스 체크로 우회 가능
+
+
+```
+웹페이지 접속 테스트(대부분 외부접속을 막아놔서 안될거임)
+http://서버IP:포트/
+
+Nginx 프로세스 확인
+ps -ef | grep nginx
+
+로그확인
+tail -n 50 /var/log/nginx/error.log
+tail -n 50 /var/log/nginx/access.log
+```
